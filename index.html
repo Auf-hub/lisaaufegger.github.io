@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lisa Aufegger — UX Research</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7; --ink: #1a1916; --ink-muted: #6b6860; --ink-faint: #b8b5ae;
+      --accent: #c0392b; --accent-soft: #f9ede9; --rule: #e8e5df; --card-bg: #ffffff;
+      --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+
+    /* PAGE LAYOUT */
+    .page { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; max-width: 1100px; margin: 0 auto; }
+    .sidebar { position: sticky; top: 0; height: 100vh; padding: 48px 28px 48px 48px; display: flex; flex-direction: column; border-right: 1px solid var(--rule); background: var(--bg); overflow-y: auto; }
+    .sidebar-name { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); text-decoration: none; display: block; margin-bottom: 4px; line-height: 1.2; }
+    .sidebar-role { font-size: 0.75rem; color: var(--ink-faint); margin-bottom: 40px; line-height: 1.4; }
+    .sidebar-nav { display: flex; flex-direction: column; }
+    .sidebar-nav-group { margin-bottom: 24px; }
+    .sidebar-nav-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+    .sidebar-nav a { display: block; font-size: 0.86rem; color: var(--ink-muted); text-decoration: none; padding: 3px 0; transition: color 0.15s; line-height: 1.5; }
+    .sidebar-nav a:hover { color: var(--accent); }
+    .sidebar-email { margin-top: auto; font-size: 0.76rem; color: var(--ink-faint); text-decoration: none; transition: color 0.15s; word-break: break-all; }
+    .sidebar-email:hover { color: var(--accent); }
+    .container { max-width: 700px; padding: 0 clamp(24px,5vw,64px); }
+    .main { padding: 72px 0 80px; overflow-y: auto; height: 100vh; }
+    section { padding: 80px 0; }
+    section + section { border-top: 1px solid var(--rule); }
+    #hero { padding-top: 0; }
+    @media (max-width: 768px) {
+      .page { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; padding: 20px 24px; border-right: none; border-bottom: 1px solid var(--rule); flex-direction: row; align-items: center; flex-wrap: wrap; gap: 12px; }
+      .sidebar-name { margin-bottom: 0; }
+      .sidebar-role { display: none; }
+      .sidebar-nav { flex-direction: row; flex-wrap: wrap; }
+      .sidebar-nav-group { display: flex; gap: 14px; margin-bottom: 0; align-items: center; }
+      .sidebar-nav-label { display: none; }
+      .sidebar-nav a { padding: 6px 0; font-size: 0.8rem; }
+      .sidebar-email { margin-top: 0; }
+      .main { padding: 36px 0; height: auto; overflow-y: visible; }
+    }
+    .hero-label { font-size: 0.73rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+    .hero-headline { font-family: var(--serif); font-size: clamp(2.4rem,5.5vw,3.8rem); line-height: 1.1; color: var(--ink); margin-bottom: 28px; }
+    .hero-headline em { font-style: italic; color: var(--accent); }
+    .hero-body { font-size: 1.02rem; color: var(--ink-muted); max-width: 540px; margin-bottom: 36px; line-height: 1.75; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { font-size: 0.73rem; font-weight: 500; letter-spacing: 0.04em; padding: 5px 12px; border-radius: 100px; background: var(--rule); color: var(--ink-muted); }
+    .tag.accent { background: var(--accent-soft); color: var(--accent); }
+
+    /* SECTION HEADERS */
+    .section-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+    .section-title { font-family: var(--serif); font-size: clamp(1.6rem,3vw,2.1rem); color: var(--ink); margin-bottom: 8px; }
+    .section-sub { font-size: 0.92rem; color: var(--ink-muted); max-width: 520px; margin-bottom: 44px; line-height: 1.7; }
+
+    /* CASE STUDY CARDS */
+    .case-studies { display: flex; flex-direction: column; }
+    .case-card { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; padding: 32px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; transition: opacity 0.2s; }
+    .case-card:first-child { border-top: 1px solid var(--rule); }
+    .case-card:hover { opacity: 0.7; }
+    .case-card:hover .card-arrow { transform: translate(3px,-3px); color: var(--accent); }
+    .card-meta { font-size: 0.73rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 9px; }
+    .card-title { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+    .card-desc { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.65; margin-bottom: 16px; max-width: 500px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .card-tag { font-size: 0.69rem; font-weight: 500; letter-spacing: 0.04em; padding: 3px 10px; border-radius: 100px; background: var(--accent-soft); color: var(--accent); }
+    .card-arrow { font-size: 1rem; color: var(--ink-faint); transition: transform 0.25s ease, color 0.2s; padding-top: 4px; flex-shrink: 0; }
+
+    /* WRITINGS */
+    .writing-item { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; transition: opacity 0.2s; }
+    .writing-item:first-child { border-top: 1px solid var(--rule); }
+    .writing-item:hover { opacity: 0.7; }
+    .writing-item:hover .writing-arrow { color: var(--accent); transform: translate(3px,-3px); }
+    .writing-title { font-size: 0.95rem; font-weight: 500; color: var(--ink); margin-bottom: 4px; line-height: 1.4; }
+    .writing-desc { font-size: 0.84rem; color: var(--ink-muted); line-height: 1.55; }
+    .writing-arrow { color: var(--ink-faint); font-size: 0.9rem; flex-shrink: 0; transition: color 0.2s, transform 0.25s; }
+    .scholar-note { margin-top: 28px; font-size: 0.86rem; color: var(--ink-muted); }
+    .scholar-note a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .scholar-note a:hover { text-decoration: underline; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    @media (max-width: 620px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .about-body { font-size: 0.95rem; color: var(--ink-muted); line-height: 1.78; }
+    .about-body p + p { margin-top: 14px; }
+    .about-exp-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 18px; }
+    .about-exp-list { display: flex; flex-direction: column; }
+    .about-exp-item { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+    .about-exp-item:first-child { border-top: 1px solid var(--rule); }
+    .about-exp-org { font-size: 0.8rem; font-weight: 500; color: var(--accent); margin-bottom: 3px; }
+    .about-exp-role { font-size: 0.93rem; font-weight: 500; color: var(--ink); margin-bottom: 2px; line-height: 1.3; }
+    .about-exp-meta { font-size: 0.78rem; color: var(--ink-faint); }
+
+    /* RÉSUMÉ */
+    .resume-grid { display: grid; grid-template-columns: 1fr; gap: 0; align-items: start; }
+    @media (max-width: 680px) { .resume-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+    /* Experience timeline */
+    .exp-list { display: flex; flex-direction: column; }
+    .exp-item { display: grid; grid-template-columns: 64px 1fr; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--rule); }
+    .exp-item:first-child { border-top: 1px solid var(--rule); }
+    .exp-years { font-size: 0.73rem; color: var(--ink-faint); line-height: 1.5; padding-top: 3px; }
+    .exp-org { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+    .exp-role { font-size: 0.97rem; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+    .exp-detail { font-size: 0.86rem; color: var(--ink-muted); line-height: 1.65; }
+
+    /* Credentials row under timeline */
+    .credentials { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .credential-chip { font-size: 0.73rem; font-weight: 500; padding: 4px 12px; border-radius: 100px; border: 1px solid var(--rule); color: var(--ink-muted); background: var(--bg); }
+
+    .resume-download { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; font-size: 0.82rem; font-weight: 500; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); border-radius: 6px; padding: 9px 18px; transition: background 0.2s, color 0.2s; }
+    .resume-download:hover { background: var(--accent); color: #fff; }
+
+    /* Skills sidebar */
+    .skills-col { }
+    .skill-group { margin-bottom: 28px; }
+    .skill-group-label { font-size: 0.67rem; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+    .skill-list { list-style: none; }
+    .skill-list li { font-size: 0.86rem; color: var(--ink-muted); padding: 5px 0; border-bottom: 1px solid var(--rule); line-height: 1.4; }
+
+    /* CONTACT */
+    .contact-links { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; max-width: 440px; }
+    .contact-link { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink); font-size: 0.95rem; font-weight: 500; padding: 16px 20px; border: 1px solid var(--rule); border-radius: 8px; background: var(--card-bg); transition: border-color 0.2s, box-shadow 0.2s; }
+    .contact-link:hover { border-color: var(--accent); box-shadow: 0 2px 14px rgba(192,57,43,0.07); }
+    .contact-icon { font-size: 1.1rem; }
+    .contact-sub { font-size: 0.78rem; color: var(--ink-faint); font-weight: 400; margin-top: 1px; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--rule); padding: 28px clamp(24px,6vw,80px); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    footer span { font-size: 0.78rem; color: var(--ink-faint); }
+
+    /* ANIMATIONS */
+    .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 520px) {
+      .nav-links { gap: 14px; }
+      .case-card { grid-template-columns: 1fr; }
+      .card-arrow { display: none; }
+      .exp-item { grid-template-columns: 1fr; gap: 4px; }
+      .exp-years { padding-top: 0; }
+    }
+
+    /* Skills — full width below resume timeline */
+    .skills-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding-top: 32px; border-top: 1px solid var(--rule); }
+    @media (max-width: 600px) { .skills-bottom { grid-template-columns: 1fr; gap: 24px; } }
+    .skills-bottom-group { }
+    .skill-list-inline { list-style: none; padding: 0; }
+    .skill-list-inline li { font-size: 0.86rem; color: var(--ink-muted); padding: 5px 0; border-bottom: 1px solid var(--rule); line-height: 1.4; }
+    .skill-list-inline li:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="page">
+<aside class="sidebar">
+  <a class="sidebar-name" href="#hero">Lisa Aufegger</a>
+  <p class="sidebar-role">User Research &amp; Insights</p>
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-group">
+      <p class="sidebar-nav-label">Work</p>
+      <a href="case-study-1.html">Converting Awareness into Adoption</a>
+      <a href="case-study-4.html">VR &amp; Productivity</a>
+    </div>
+    <div class="sidebar-nav-group">
+      <p class="sidebar-nav-label">About</p>
+      <a href="#about">About me</a>
+      <a href="#resume">Résumé</a>
+      <a href="#writings">Writings</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+  <a class="sidebar-email" href="mailto:lisa.aufegger@gmail.com">lisa.aufegger@gmail.com</a>
+</aside>
+<div class="main">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <p class="hero-label fade-up">UX Research &amp; Insights</p>
+    <h1 class="hero-headline fade-up" style="transition-delay:.08s">
+      Turning <em>human behaviour</em><br>into product clarity
+    </h1>
+    <p class="hero-body fade-up" style="transition-delay:.16s">
+      Lead UX Researcher and Human Factors specialist with 10+ years translating mixed-methods research into product decisions — across VR, developer ecosystems, and safety-critical software.
+    </p>
+    <div class="skill-tags fade-up" style="transition-delay:.24s">
+      <span class="tag accent">Mixed Methods</span>
+      <span class="tag accent">Qualitative Research</span>
+      <span class="tag accent">Survey Design</span>
+      <span class="tag">Human Factors</span>
+      <span class="tag">VR / MR</span>
+      <span class="tag">Developer Ecosystems</span>
+      <span class="tag">Stakeholder Influence</span>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="container">
+    <p class="section-label fade-up">Selected Work</p>
+    <h2 class="section-title fade-up">Case Studies</h2>
+    <p class="section-sub fade-up">Spanning developer ecosystems, VR workplaces, and safety-critical software. Details modified to protect confidential information.</p>
+    <div class="case-studies">
+      <a class="case-card fade-up" href="case-study-1.html">
+        <div>
+          <p class="card-meta">Quantitative · Developer Ecosystems · 5 Markets</p>
+          <h3 class="card-title">Converting Awareness into Adoption</h3>
+          <p class="card-desc">Multi-market segmentation study identifying the strongest conversion levers for developer adoption within the first 7 days. Directly informed a $460K+ marketing investment and shifted product onboarding strategy across five markets.</p>
+          <div class="card-tags">
+            <span class="card-tag">Segmentation</span>
+            <span class="card-tag">Regression Analysis</span>
+            <span class="card-tag">Multi-market</span>
+            <span class="card-tag">Quant</span>
+          </div>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+      <a class="case-card fade-up" href="case-study-4.html">
+        <div>
+          <p class="card-meta">Qualitative · VR &amp; Productivity · 4 Countries</p>
+          <h3 class="card-title">VR and Productivity in Knowledge Workers</h3>
+          <p class="card-desc">Two-study qualitative programme (N=72) exploring whether VR can support real work. Produced the VR Productivity Framework — adopted as design guidance for immersive workspace and collaboration tool development.</p>
+          <div class="card-tags">
+            <span class="card-tag">Contextual Interviews</span>
+            <span class="card-tag">Framework Analysis</span>
+            <span class="card-tag">Journey Mapping</span>
+            <span class="card-tag">VR</span>
+          </div>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- WRITINGS -->
+<section id="writings">
+  <div class="container">
+    <p class="section-label fade-up">Publications</p>
+    <h2 class="section-title fade-up">Writings</h2>
+    <p class="section-sub fade-up">24 journal articles · 16 conference papers · 3 book chapters · 1,200+ citations · h-index 19.</p>
+    <div class="writings-list">
+      <a class="writing-item fade-up" href="https://www.tandfonline.com/doi/abs/10.1186/s40545-020-00293-5" target="_blank" rel="noopener">
+        <div>
+          <p class="writing-title">Behavioural Drivers of Generic Drug Adoption in European Healthcare Markets</p>
+          <p class="writing-desc">How price and brand cues in DTC advertising influence purchase intentions for cost-effective generics.</p>
+        </div>
+        <span class="writing-arrow">↗</span>
+      </a>
+      <a class="writing-item fade-up" href="https://link.springer.com/article/10.1186/s12874-019-0756-2" target="_blank" rel="noopener">
+        <div>
+          <p class="writing-title">Applying Machine Learning to Understand Teamwork &amp; Patient Safety in Healthcare</p>
+          <p class="writing-desc">Signal processing and ML to analyse teamwork across 28 clinical teams using recurrence quantification analysis.</p>
+        </div>
+        <span class="writing-arrow">↗</span>
+      </a>
+      <a class="writing-item fade-up" href="https://link.springer.com/article/10.1186/s12911-020-1080-9" target="_blank" rel="noopener">
+        <div>
+          <p class="writing-title">User Interface Design &amp; Patient Safety in Electronic Prescribing Systems</p>
+          <p class="writing-desc">How UI design choices influence prescribing behaviour and patient safety in electronic prescribing systems.</p>
+        </div>
+        <span class="writing-arrow">↗</span>
+      </a>
+    </div>
+    <p class="scholar-note fade-up">Full list on <a href="https://scholar.google.com/citations?hl=en&user=gToDi2wAAAAJ" target="_blank" rel="noopener">Google Scholar →</a></p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <p class="section-label fade-up">Background</p>
+    <h2 class="section-title fade-up">Lisa Aufegger</h2>
+    <div class="about-grid fade-up" style="transition-delay:.08s">
+
+      <div class="about-body">
+        <p>I'm a UX researcher and Human Factors specialist focused on how people make decisions in complex systems — VR, developer tools, and safety-critical software.</p>
+        <p>My background in psychology shapes how I approach research: connecting human behaviour to business and technical constraints, with an emphasis on rigorous measurement and decision-ready outputs.</p>
+        <p>Outside work I hike and cycle. Curiosity and iteration drive most of what I do.</p>
+      </div>
+
+      <div>
+        <p class="about-exp-label">Experience</p>
+        <div class="about-exp-list">
+
+          <div class="about-exp-item">
+            <p class="about-exp-org">Meta · Reality Labs</p>
+            <p class="about-exp-role">Senior UX Researcher</p>
+            <p class="about-exp-meta">2021 – Present · London</p>
+          </div>
+
+          <div class="about-exp-item">
+            <p class="about-exp-org">Oracle (prev. Cerner)</p>
+            <p class="about-exp-role">Senior Human Factors Specialist</p>
+            <p class="about-exp-meta">2019 – 2021 · Berlin</p>
+          </div>
+
+          <div class="about-exp-item">
+            <p class="about-exp-org">London School of Economics</p>
+            <p class="about-exp-role">PostDoc, Dept. of Management</p>
+            <p class="about-exp-meta">2017 – 2021 · London</p>
+          </div>
+
+          <div class="about-exp-item">
+            <p class="about-exp-org">Imperial College London</p>
+            <p class="about-exp-role">Research Associate, Patient Safety</p>
+            <p class="about-exp-meta">2016 – 2019 · London</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RÉSUMÉ -->
+<section id="resume">
+  <div class="container">
+    <p class="section-label fade-up">Experience &amp; Skills</p>
+    <h2 class="section-title fade-up">Résumé</h2>
+
+    <div class="resume-grid">
+
+      <!-- Experience timeline -->
+      <div>
+        <div class="exp-list">
+
+          <div class="exp-item fade-up">
+            <div class="exp-years">2021<br>Present</div>
+            <div>
+              <p class="exp-org">Meta · Reality Labs</p>
+              <p class="exp-role">Senior UX Researcher</p>
+              <p class="exp-detail">Lead mixed-methods research for VR productivity, learning &amp; development, and enterprise enablement. Drive adoption-oriented research supporting sales enablement and go-to-market strategy. Partner with Product, Design, Engineering, and GTM to scope research and deliver decision-ready insights tied to product milestones.</p>
+            </div>
+          </div>
+
+          <div class="exp-item fade-up">
+            <div class="exp-years">2019<br>2021</div>
+            <div>
+              <p class="exp-org">Oracle (prev. Cerner) · Berlin</p>
+              <p class="exp-role">Senior Human Factors Specialist</p>
+              <p class="exp-detail">Led human factors evaluation and usability validation of safety-critical A&amp;E software for regulatory compliance. Conducted workflow and task analysis with clinical stakeholders to reduce error likelihood and improve product safety.</p>
+            </div>
+          </div>
+
+          <div class="exp-item fade-up">
+            <div class="exp-years">2017<br>2021</div>
+            <div>
+              <p class="exp-org">London School of Economics</p>
+              <p class="exp-role">PostDoc, Dept. of Management</p>
+              <p class="exp-detail">Applied research on uncertainty, risk communication, and decision-making for external clients including Defence Science and Technology Laboratory (UK) and Bank of England. Delivered frameworks and stakeholder-facing recommendations for complex decision environments.</p>
+            </div>
+          </div>
+
+          <div class="exp-item fade-up">
+            <div class="exp-years">2016<br>2019</div>
+            <div>
+              <p class="exp-org">Imperial College London</p>
+              <p class="exp-role">Research Associate, Patient Safety</p>
+              <p class="exp-detail">Designed and evaluated simulation-based learning interventions to improve teamwork in healthcare. Built a peer-reviewed publication record across digital health, patient safety, and behavioural decision-making.</p>
+            </div>
+          </div>
+
+          <div class="exp-item fade-up">
+            <div class="exp-years">2019<br>2025</div>
+            <div>
+              <p class="exp-org">Imperial College London</p>
+              <p class="exp-role">Honorary Research Fellow</p>
+              <p class="exp-detail">Research informing digital innovation and health policy in collaboration with multidisciplinary teams at the Patient Safety Translational Research Centre.</p>
+            </div>
+          </div>
+
+          <div class="exp-item fade-up">
+            <div class="exp-years">Education</div>
+            <div>
+              <p class="exp-org">Royal College of Music · Imperial College London</p>
+              <p class="exp-role">Ph.D. Performance Science</p>
+              <p class="exp-detail">MSc Cognitive &amp; Applied Psychology (Distinction) · University of Klagenfurt</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Professional credentials -->
+        <div class="credentials fade-up">
+          <span class="credential-chip">CPsychol · BPS 2022</span>
+          <span class="credential-chip">CSci · Science Council 2024</span>
+          <span class="credential-chip">AFBPsS · BPS 2019</span>
+          <span class="credential-chip">h-index 19</span>
+          <span class="credential-chip">1,200+ citations</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Skills — full width below timeline -->
+    <div class="skills-bottom fade-up" style="margin-top:40px;">
+      <div class="skills-bottom-group">
+        <p class="skill-group-label">Research Methods</p>
+        <ul class="skill-list-inline">
+          <li>In-depth Interviews</li>
+          <li>Usability Testing</li>
+          <li>Survey Design</li>
+          <li>Diary Studies</li>
+          <li>Contextual Inquiry</li>
+          <li>Quasi-experimental Design</li>
+          <li>Thematic Analysis</li>
+          <li>Multivariate Statistics</li>
+          <li>Task &amp; Workflow Analysis</li>
+        </ul>
+      </div>
+      <div class="skills-bottom-group">
+        <p class="skill-group-label">Tools</p>
+        <ul class="skill-list-inline">
+          <li>Qualtrics</li>
+          <li>SPSS / Python</li>
+          <li>UserTesting</li>
+          <li>Figma</li>
+          <li>Miro</li>
+        </ul>
+      </div>
+      <div class="skills-bottom-group">
+        <p class="skill-group-label">Domains</p>
+        <ul class="skill-list-inline">
+          <li>VR / MR &amp; Future of Work</li>
+          <li>Developer Ecosystems</li>
+          <li>Healthcare &amp; Patient Safety</li>
+          <li>L&amp;D &amp; Enterprise Enablement</li>
+          <li>Defence &amp; Risk</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label fade-up">Get in Touch</p>
+    <h2 class="section-title fade-up">Contact</h2>
+    <p class="section-sub fade-up" style="margin-bottom:0">Happy to connect with product teams, researchers, and anyone thinking carefully about how research shapes better products.</p>
+    <div class="contact-links fade-up" style="transition-delay:.1s">
+      <a class="contact-link" href="mailto:lisa.aufegger@gmail.com">
+        <span class="contact-icon">✉️</span>
+        <div><div>lisa.aufegger@gmail.com</div><div class="contact-sub">Email</div></div>
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/lisa-aufegger" target="_blank" rel="noopener">
+        <span class="contact-icon">💼</span>
+        <div><div>linkedin.com/in/lisa-aufegger</div><div class="contact-sub">LinkedIn</div></div>
+      </a>
+      <a class="contact-link" href="https://scholar.google.com/citations?hl=en&user=gToDi2wAAAAJ" target="_blank" rel="noopener">
+        <span class="contact-icon">🎓</span>
+        <div><div>Google Scholar</div><div class="contact-sub">Publications &amp; citations</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid var(--rule);padding:24px 48px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+  <span style="font-size:0.78rem;color:var(--ink-faint);">Lisa Aufegger · UX Research &amp; Insights</span>
+  <span style="font-size:0.78rem;color:var(--ink-faint);">lisa.aufegger@gmail.com</span>
+</footer>
+</div><!-- /main -->
+</div><!-- /page -->
+
+<script>
+  document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+</script>
+</body>
+</html>
