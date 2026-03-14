@@ -27,7 +27,7 @@
     .sidebar-nav-label { font-size: 0.63rem; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
     .sidebar-nav a { display: block; font-size: 0.86rem; color: var(--ink-muted); text-decoration: none; padding: 3px 0; transition: color 0.15s; line-height: 1.5; }
     .sidebar-nav a:hover { color: var(--accent); }
-    .sidebar-email { margin-top: auto; font-size: 0.76rem; color: var(--ink-faint); text-decoration: none; transition: color 0.15s; word-break: break-all; }
+    .sidebar-email { display: none; }
     .sidebar-email:hover { color: var(--accent); }
     .container { max-width: 700px; padding: 0 clamp(24px,5vw,64px); }
     .main { padding: 72px 0 80px; overflow-y: auto; height: 100vh; }
@@ -43,7 +43,7 @@
       .sidebar-nav-group { display: flex; gap: 14px; margin-bottom: 0; align-items: center; }
       .sidebar-nav-label { display: none; }
       .sidebar-nav a { padding: 6px 0; font-size: 0.8rem; }
-      .sidebar-email { margin-top: 0; font-size: 0.76rem; }
+      .sidebar-email { display: none; }
       .main { padding: 32px 0; height: auto; overflow-y: visible; }
       section { padding: 40px 0; }
       #hero { padding-top: 0; }
@@ -180,7 +180,6 @@
       <a href="#contact">Contact</a>
     </div>
   </nav>
-  <a href="mailto:lisa.aufegger@gmail.com">lisa.aufegger@gmail.com</a>
 </aside>
 <div class="main">
 
@@ -453,7 +452,11 @@
     <h2 class="section-title fade-up">Contact</h2>
     <p class="section-sub fade-up" style="margin-bottom:0">Happy to connect with product teams, researchers, and anyone thinking carefully about how research shapes better products.</p>
     <div class="contact-links fade-up" style="transition-delay:.1s">
-      <a href="mailto:lisa.aufegger@gmail.com">lisa.aufegger@gmail.com</a>
+      
+      <a class="contact-link" href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#108;&#105;&#115;&#97;&#46;&#97;&#117;&#102;&#101;&#103;&#103;&#101;&#114;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">
+        <span class="contact-icon">✉️</span>
+        <div><div>lisa.aufegger@gmail.com</div><div class="contact-sub">Email</div></div>
+      </a>
       <a class="contact-link" href="https://www.linkedin.com/in/lisa-aufegger" target="_blank" rel="noopener">
         <span class="contact-icon">💼</span>
         <div><div>linkedin.com/in/lisa-aufegger</div><div class="contact-sub">LinkedIn</div></div>
@@ -469,11 +472,10 @@
 <!-- FOOTER -->
 <footer style="border-top:1px solid var(--rule);padding:24px 48px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
   <span style="font-size:0.78rem;color:var(--ink-faint);">Lisa Aufegger · UX Research &amp; Insights</span>
-  <span style="font-size:0.78rem;color:var(--ink-faint);">lisa.aufegger@gmail.com</span>
+  <span style="font-size:0.78rem;color:var(--ink-faint);">&#108;&#105;&#115;&#97;&#46;&#97;&#117;&#102;&#101;&#103;&#103;&#101;&#114;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</span>
 </footer>
 </div><!-- /main -->
 </div><!-- /page -->
-
 <script>
   document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
 </script>
